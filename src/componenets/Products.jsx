@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { Checkbox } from 'semantic-ui-react'
+
 const Products = () => {
     const [alldata, setAllData] = useState();
-    const [playList, setPlaylist] = useState({
-        "PlayListId": 0,
-        "Post_Ids": [],
-        "Name": "",
-        "Description": ""
-    });
+    const [Name, setName] = useState('');
+    const [Description, setDescription] = useState('');
+    const [Post_Ids, setPost_Ids] = useState(false);
 
-    // axios.post
 
     useEffect(() => {
         axios({
@@ -31,14 +29,8 @@ const Products = () => {
         })
     }, []);
 
-    function handleChange(e) {
-        e.preventDefault();
-        const newPlaylist = { ...playList };
-        newPlaylist[e.target.id] = e.target.value;
-        setPlaylist(newPlaylist);
-    }
 
-    useEffect(() => {
+    function createPlaylist() {
         axios({
             method: 'post',
             url: "https://fxojmluid9.execute-api.ap-south-1.amazonaws.com/Prodapi/engt/createPlayList",
@@ -47,25 +39,27 @@ const Products = () => {
                 "X-tenant-key": "DIVANOR123",
             },
             data: {
-                "Index": 1,
-                "ContentType": [2]
+                "PlayListId": 0,
+                "Post_Ids": [],
+                "Name": Name,
+                "Description": Description
             }
         }).then((res) => {
-            setAllData(res.data.data.Feeds);
-            console.log(res.data.data.Feeds);
+
         }, (err) => {
             console.log(err);
         })
-    }, [])
+
+    }
 
     if (alldata !== undefined) {
         return (
             <>
                 <div className="container mt-3">
                     <div className="row">
-                        <div className="col-lg-4"><input type="text" id='Name' placeholder='PlayList Name' onChange={(e) => handleChange(e)} /></div>
-                        <div className="col-lg-4"><input type="text" id='Description' placeholder='Description' onChange={(e) => handleChange(e)} /></div>
-                        <div className="col-lg-4"><button className='btn btn-primary'>createplaylist</button></div>
+                        <div className="col-lg-4"><input type="text" placeholder='PlayList Name' onChange={(e) => setName(e.target.value)} /></div>
+                        <div className="col-lg-4"><input type="text" placeholder='Description' onChange={(e) => setDescription(e.target.value)} /></div>
+                        <div className="col-lg-4"><button className='btn btn-primary' onClick={createPlaylist()}>createplaylist</button></div>
                         {
                             alldata.map((data, key) => {
                                 return <div className="col-lg-3 mt-2">
