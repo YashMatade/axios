@@ -31,6 +31,7 @@ const Products = () => {
 
 
     function createPlaylist() {
+
         axios({
             method: 'post',
             url: "https://fxojmluid9.execute-api.ap-south-1.amazonaws.com/Prodapi/engt/createPlayList",
@@ -64,13 +65,12 @@ const Products = () => {
                             alldata.map((data, key) => {
                                 return <div className="col-lg-3 mt-2">
                                     <div className="card" style={{ width: "11rem" }}>
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+                                        <input class="form-check-input" type="checkbox" value={data.EngagementPostId} onChange={(e) => { setPost_Ids(e) }} id="flexCheckChecked" />
                                         <label class="form-check-label" for="flexCheckChecked">
                                             <img src={data.Thumbnail_URL} className="card-img-top" alt="..." />
-
                                             <div className="card-body">
                                                 <h5 className="card-title">{data.Thumbnail_Title}</h5>
-                                                <p className="card-text">{data.EngagementPostId}</p>
+                                                <p className="card-text"></p>
                                             </div>
                                         </label>
 
