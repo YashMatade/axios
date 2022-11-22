@@ -6,7 +6,7 @@ const Products = () => {
     const [alldata, setAllData] = useState();
     const [Name, setName] = useState('');
     const [Description, setDescription] = useState('');
-    const [Post_Ids, setPost_Ids] = useState(false);
+    const [Post_Ids, setPost_Ids] = useState([]);
 
 
     useEffect(() => {
@@ -29,8 +29,19 @@ const Products = () => {
         })
     }, []);
 
+    function handleChange(e) {
 
-    function createPlaylist() {
+        
+
+        const { checked, value } = e.target;
+        if (checked) {
+            setPost_Ids([...Post_Ids, value])
+        } else {
+            setPost_Ids([Post_Ids.filter((e) => e !== value)]);
+        }
+    }
+
+    function createPlaylist(e) {
 
         axios({
             method: 'post',
@@ -58,8 +69,15 @@ const Products = () => {
             <>
                 <div className="container mt-3">
                     <div className="row">
-                        <div className="col-lg-4"><input type="text" placeholder='PlayList Name' onChange={(e) => setName(e.target.value)} /></div>
-                        <div className="col-lg-4"><input type="text" placeholder='Description' onChange={(e) => setDescription(e.target.value)} /></div>
+                        <div className="col-lg-4"><input type="text" placeholder='PlayList Name'
+                            //  onChange={(e) => setName(e.target.value)} 
+                            onChange={(e) => { handleChange(e) }}
+                        /></div>
+                        <div className="col-lg-4"><input type="text" placeholder='Description'
+                            //  onChange={(e) => setDescription(e.target.value)} 
+                            onChange={(e) => { handleChange(e) }}
+
+                        /></div>
                         <div className="col-lg-4"><button className='btn btn-primary' onClick={createPlaylist()}>createplaylist</button></div>
                         {
                             alldata.map((data, key) => {
@@ -73,17 +91,12 @@ const Products = () => {
                                                 <p className="card-text"></p>
                                             </div>
                                         </label>
-
                                     </div>
                                 </div>
                             })
                         }
-
-
                     </div>
                 </div>
-
-
             </>
         )
     } else {
